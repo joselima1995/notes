@@ -3,6 +3,7 @@ const cors = require('cors')
 const app = express()
 
 app.use(express.json())
+app.use(express.static('dist'))
 app.use(cors())
 
 const requestLogger = (request, response, next) => {
@@ -49,6 +50,18 @@ app.get('/api/notes/:id', (request, response) => {
   } else {
     response.status(404).end()
   }
+})
+
+app.put('/api/notes/:id', (request, response) => {
+  const id = request.params.id
+  console.log("id: " + id);
+  const note = notes.find(note => note.id === id)
+  if (note) {
+    note.important = !note.important;
+    response.json(note)
+  } else {
+    response.status(404).end()
+  } 
 })
 
 app.post('/api/notes', (request, response) => {
